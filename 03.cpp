@@ -5,18 +5,20 @@ class vector_lite
 {
 public:
 	vector_lite();
+	vector_lite(const vector_lite& vl);
 	~vector_lite();
 	int size();
 	void push_back(const T value);
 	int capacity();
 	T& at(const int& key);
-
+	vector_lite& operator = (const vector_lite& vl);
 private:
 	int arr_length{ 1 };
 	int arr_length_logic{ 0 };
 	T* v{nullptr};
 	T* create_arr();
 	void delete_arr();
+	void assign(const vector_lite& t);
 	void expand_arr();
 };
 
@@ -27,9 +29,9 @@ vector_lite<T>::vector_lite()
 }
 
 template<typename T>
-vector_lite<T>::~vector_lite()
+vector_lite<T>::vector_lite(const vector_lite<T>& vl)
 {
-	this->delete_arr();
+	this->assign(vl);
 }
 
 template<typename T>
@@ -84,12 +86,39 @@ T& vector_lite<T>::at(const int& key)
 }
 
 template<typename T>
+vector_lite<T>& vector_lite<T>::operator = (const vector_lite<T>& r)
+{
+	if (this != &r) {
+		this->delete_arr();
+		this->assign(r);
+		return *this;
+	}
+	return *this;
+}
+
+template<typename T>
+void vector_lite<T>::assign(const vector_lite<T>& t)
+{
+	this->v = new int[t.arr_length]{ 0 };
+	this->arr_length = t.arr_length;
+	for (int i = 0; i < this->arr_length; ++i)
+	{
+		this->v[i] = t.v[i];
+	}
+}
+
+template<typename T>
 void vector_lite<T>::delete_arr()
 {
 	delete[] this->v;
 	this->v = nullptr;
 }
 
+template<typename T>
+vector_lite<T>::~vector_lite()
+{
+	this->delete_arr();
+}
 
 int main()
 {
@@ -105,7 +134,8 @@ int main()
 		std::cout << vl.at(4) << std::endl;
 		std::cout << vl.size() << std::endl;
 		std::cout << vl.capacity() << std::endl;
-		//std::cout << vl.at(10) << std::endl;
+		std::cout << vl.at(10) << std::endl;
+		vector_lite<int> vl1(vl);
 	}
 	catch (const std::exception& ex)
 	{
