@@ -32,6 +32,7 @@ template<typename T>
 vector_lite<T>::vector_lite(const vector_lite<T>& vl)
 {
 	this->assign(vl);
+	this->arr_length_logic = vl.arr_length_logic;
 }
 
 template<typename T>
@@ -91,6 +92,7 @@ vector_lite<T>& vector_lite<T>::operator = (const vector_lite<T>& r)
 	if (this != &r) {
 		this->delete_arr();
 		this->assign(r);
+		this->arr_length_logic = r.arr_length_logic;
 		return *this;
 	}
 	return *this;
